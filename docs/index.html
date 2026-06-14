@@ -3,71 +3,139 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>DEIC Belief-State Simulator</title>
-  <style>
-    :root { --accent: #8250df; --ink: #1f2328; --muted: #59636e; --bg: #f6f8fa; --line: #d0d7de; }
-    * { box-sizing: border-box; }
-    body { margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: var(--ink); background: var(--bg); }
-    header { padding: 56px 24px 40px; background: linear-gradient(135deg, #ffffff 0%, #eef4ff 100%); border-bottom: 1px solid var(--line); }
-    main { max-width: 1040px; margin: 0 auto; padding: 28px 20px 56px; }
-    .hero { max-width: 1040px; margin: 0 auto; }
-    .eyebrow { color: var(--accent); font-weight: 700; letter-spacing: 0; text-transform: uppercase; font-size: 13px; }
-    h1 { font-size: clamp(34px, 7vw, 72px); line-height: 0.95; margin: 10px 0 18px; letter-spacing: 0; }
-    .tagline { max-width: 760px; color: var(--muted); font-size: 20px; line-height: 1.5; }
-    .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 26px; }
-    a.button { color: #fff; background: var(--accent); padding: 12px 16px; text-decoration: none; border-radius: 8px; font-weight: 700; }
-    a.secondary { color: var(--accent); background: #fff; border: 1px solid var(--line); }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
-    section, .widget { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 20px; }
-    section h2, .widget h2 { margin: 0 0 10px; font-size: 20px; }
-    section p, .widget p { color: var(--muted); line-height: 1.55; }
-    .widget { margin-top: 18px; }
-    .score-grid, .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
-    button, input, select { font: inherit; }
-    button { border: 1px solid var(--line); background: #fff; color: var(--ink); border-radius: 8px; padding: 11px; cursor: pointer; }
-    input, select { width: 100%; margin: 8px 0 16px; padding: 10px; border: 1px solid var(--line); border-radius: 8px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 8px; }
-    th, td { text-align: left; padding: 10px; border-bottom: 1px solid var(--line); }
-    .cards div { border: 1px solid var(--line); border-radius: 8px; padding: 16px; background: #f6f8fa; font-weight: 700; }
-    .artifact { position: relative; height: 240px; border-radius: 8px; background: radial-gradient(circle at center, #fff, #eef4ff); border: 1px solid var(--line); overflow: hidden; }
-    .artifact span { position: absolute; width: 120px; height: 92px; border: 3px solid var(--accent); border-radius: 42% 58% 46% 54%; opacity: .82; }
-    .artifact span:nth-child(1) { left: 28%; top: 34%; transform: rotate(-12deg); }
-    .artifact span:nth-child(2) { left: 42%; top: 28%; transform: rotate(21deg); }
-    .artifact span:nth-child(3) { left: 36%; top: 48%; transform: rotate(6deg); }
-    pre { overflow: auto; background: #0d1117; color: #e6edf3; padding: 16px; border-radius: 8px; }
-    .terminal { background: #0d1117; color: #7ee787; }
-    .terminal p { color: #7ee787; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
-    footer { color: var(--muted); font-size: 13px; margin-top: 28px; }
-  </style>
+  <meta name="description" content="A browser-based diagnostic worksheet for redundant sensor arrays: reliability-weighted consensus, suspect-sensor ranking, safe commit/abstain/escalate decisions, and next-probe selection.">
+  <title>DEIC | Sensor Trust Diagnostic</title>
+  <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-  <header>
-    <div class="hero">
-      <div class="eyebrow">Live project surface</div>
-      <h1>DEIC Belief-State Simulator</h1>
-      <p class="tagline">Hidden-state reasoning with query budgets, source reliability, and adaptive recovery.</p>
-      <div class="actions">
-        <a class="button" href="https://github.com/Siddhantdamre/Wait-a-minute...who-are-you">View repository</a>
-        <a class="button secondary" href="https://github.com/Siddhantdamre">GitHub profile</a>
-      </div>
+  <header class="topbar">
+    <div class="brand">
+      <strong>DEIC</strong>
+      <span>Redundant-sensor diagnostic</span>
     </div>
+    <a class="icon-link" href="https://github.com/Siddhantdamre/Wait-a-minute...who-are-you" title="View source on GitHub" aria-label="View source on GitHub">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3.3-.4 6.8-1.6 6.8-7A5.4 5.4 0 0 0 19.4 4 5 5 0 0 0 19.3.5S18.2.1 15 1.8a13.4 13.4 0 0 0-7 0C4.8.1 3.7.5 3.7.5A5 5 0 0 0 3.6 4a5.4 5.4 0 0 0-1.4 3.7c0 5.4 3.5 6.6 6.8 7A4.8 4.8 0 0 0 8 18v4"/><path d="M8 19c-3 .9-3-1.5-4-2"/></svg>
+    </a>
   </header>
-  <main>
-    <div class="grid"><section><h2>Novelty</h2><p>Models diagnostic reasoning as a reusable executive inference subsystem rather than a single classifier.</p></section>
-<section><h2>Demo</h2><p>Tune source reliability and query budget to see how confidence and recovery strategy change.</p></section>
-<section><h2>Next Upgrade</h2><p>Connect sliders to the actual DEIC Python model and publish scenario traces.</p></section></div>
-    
-        <div class="widget">
-          <h2>Belief-State Controls</h2>
-          <label>Source reliability <input id="rel" type="range" min="20" max="95" value="70"></label>
-          <label>Query budget <input id="budget" type="range" min="1" max="10" value="4"></label>
-          <p id="widget-output"></p>
+
+  <main class="app-grid">
+    <aside class="controls" aria-label="Sensor readings and operating thresholds">
+      <h1>Diagnose a sensor disagreement</h1>
+      <p class="intro">Enter redundant readings, reliability priors, and probe costs. DEIC estimates the state, names the most suspect sensor, and recommends the next confirmation without forcing a conclusion.</p>
+
+      <div class="scenario-row">
+        <button class="secondary" type="button" data-scenario="outlier">Hot pack, one low sensor</button>
+        <button class="secondary" type="button" data-scenario="split">Split array</button>
+        <button class="secondary" type="button" data-scenario="stable">Stable array</button>
+      </div>
+
+      <form id="diagnostic-form">
+        <table class="sensor-table">
+          <thead><tr><th>Sensor</th><th>Reading</th><th>Reliability</th><th>Probe cost</th><th></th></tr></thead>
+          <tbody id="sensor-rows"></tbody>
+        </table>
+        <button id="add-sensor" class="secondary" type="button">Add sensor</button>
+
+        <div class="settings">
+          <div class="field">
+            <label for="unit">Unit</label>
+            <input id="unit" type="text" value="deg C">
+          </div>
+          <div class="field">
+            <label for="expected-noise">Expected noise (+/-)</label>
+            <input id="expected-noise" type="number" min="0.1" step="0.1" value="1">
+          </div>
+          <div class="field">
+            <label for="warning-threshold">Warning threshold</label>
+            <input id="warning-threshold" type="number" step="0.1" value="50">
+          </div>
+          <div class="field">
+            <label for="critical-threshold">Critical threshold</label>
+            <input id="critical-threshold" type="number" step="0.1" value="60">
+          </div>
+          <div class="field">
+            <label for="probe-budget">Confirmatory probes</label>
+            <input id="probe-budget" type="number" min="0" max="20" step="1" value="1">
+          </div>
         </div>
-        <script>
-          function update(){const r=+rel.value,b=+budget.value; const c=Math.min(98, Math.round((r*0.7)+(b*4))); document.getElementById('widget-output').textContent=`Estimated confidence ${c}% - ${c>75?'act with verification':'ask another diagnostic question'}.`;}
-          rel.oninput=budget.oninput=update; update();
-        </script>
-    <footer>Generated demo surface on 2026-05-14. Replace this with the full deployed app as the project matures.</footer>
+
+        <button class="primary" type="submit">Run diagnostic</button>
+        <p id="error-message" class="form-error hidden" role="alert"></p>
+        <p class="privacy">This worksheet demonstrates bounded inference and query selection. It is not certified control logic and must not directly command machinery, vehicles, clinical equipment, or safety systems.</p>
+      </form>
+    </aside>
+
+    <section class="workspace" aria-live="polite">
+      <div id="empty-state" class="empty">
+        <div>
+          <div class="sensor-visual" aria-hidden="true"></div>
+          <strong>Estimate state without trusting every sensor equally</strong>
+          <span>A thermal-pack example is loaded. Run the diagnostic to inspect the decision trace.</span>
+        </div>
+      </div>
+
+      <div id="results-shell" class="results-shell hidden">
+        <div class="result-head">
+          <div>
+            <h2>Diagnostic result</h2>
+            <p id="result-subtitle"></p>
+          </div>
+          <span id="decision" class="decision">ABSTAIN</span>
+        </div>
+
+        <div class="metrics">
+          <div class="metric"><span>Estimated state</span><strong id="metric-state"></strong></div>
+          <div class="metric"><span>Consensus</span><strong id="metric-consensus"></strong></div>
+          <div class="metric"><span>Confidence</span><strong id="metric-confidence"></strong></div>
+          <div class="metric"><span>Suspect sensor</span><strong id="metric-suspect"></strong></div>
+          <div class="metric"><span>Conflict weight</span><strong id="metric-conflict"></strong></div>
+        </div>
+
+        <div class="dashboard-grid">
+          <section class="panel">
+            <div class="panel-header"><h3>Sensor evidence map</h3></div>
+            <div class="panel-body">
+              <canvas id="sensor-plot" class="plot" width="760" height="290" aria-label="Sensor readings and thresholds"></canvas>
+              <div id="decision-note" class="decision-note"></div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header"><h3>Next best confirmation</h3></div>
+            <div class="panel-body">
+              <ul id="probe-list" class="probe-list"></ul>
+              <div class="result-actions" style="margin-top:15px">
+                <button id="copy-button" class="secondary" type="button">Copy summary</button>
+                <button id="download-button" class="secondary" type="button">Download JSON</button>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <section class="panel" style="margin-top:17px">
+          <div class="panel-header"><h3>Auditable sensor trace</h3></div>
+          <div class="table-wrap">
+            <table class="trace-table">
+              <thead><tr><th>Sensor</th><th>Reading</th><th>Reliability</th><th>Deviation</th><th>Leave-one-out</th><th>Suspect score</th><th>Probe value</th></tr></thead>
+              <tbody id="trace-rows"></tbody>
+            </table>
+          </div>
+        </section>
+        <p class="scope">The estimator uses a reliability-weighted median, robust dispersion, leave-one-out consensus, explicit threshold uncertainty, and value-per-cost probe ranking. Real deployments require calibrated noise models, temporal dynamics, authenticated telemetry, and domain validation.</p>
+      </div>
+    </section>
   </main>
+
+  <template id="sensor-template">
+    <tr>
+      <td><input class="sensor-id" type="text" aria-label="Sensor ID"></td>
+      <td><input class="sensor-value" type="number" step="0.1" aria-label="Sensor reading"></td>
+      <td><input class="sensor-reliability" type="number" min="0.05" max="1" step="0.05" aria-label="Sensor reliability"></td>
+      <td><input class="sensor-cost" type="number" min="0.1" step="0.1" aria-label="Probe cost"></td>
+      <td class="remove-cell"><button class="remove-sensor" type="button" aria-label="Remove sensor">Remove</button></td>
+    </tr>
+  </template>
+
+  <script type="module" src="./app.mjs"></script>
 </body>
 </html>
